@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
 import { useAppDispatch, useAppSelector } from '../lib/hooks'
 import { updateLayoutOrder } from '../lib/slices/preferencesSlice'
@@ -32,8 +33,8 @@ export default function DraggableLayout() {
   }
 
   // Add favorites to layout if not present
-  const fullLayoutOrder = layoutOrder.includes('favorites') 
-    ? layoutOrder 
+  const fullLayoutOrder = layoutOrder.includes('favorites')
+    ? layoutOrder
     : [...layoutOrder, 'favorites']
 
   return (
@@ -72,6 +73,8 @@ export default function DraggableLayout() {
             >
               {fullLayoutOrder.map((componentKey, index) => {
                 const Component = components[componentKey as keyof typeof components]
+                if (!Component) return null
+
                 return (
                   <Draggable
                     key={componentKey}
@@ -79,31 +82,55 @@ export default function DraggableLayout() {
                     index={index}
                     isDragDisabled={!dragEnabled}
                   >
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        className={`${
-                          snapshot.isDragging
-                            ? 'shadow-2xl transform rotate-2 z-50'
-                            : 'shadow-sm'
-                        } ${
-                          dragEnabled
-                            ? 'cursor-move border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4'
-                            : ''
-                        } transition-all duration-200`}
-                      >
-                        {dragEnabled && (
-                          <div
-                            {...provided.dragHandleProps}
-                            className="flex items-center justify-center w-full py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300 text-sm font-medium"
-                          >
-                            ⋮⋮ Drag to reorder &quot;{componentKey}&quot; section
-                          </div>
-                        )}
-                        <Component />
-                      </div>
-                    )}
+                    {(provided, snapshot) => {
+                      const draggingContent = (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          className={`${
+                            snapshot.isDragging
+                              ? 'shadow-2xl z-50 bg-white dark:bg-gray-800 border-2 border-blue-500 rounded-lg opacity-95'
+                              : 'shadow-sm'
+                          } ${
+                            dragEnabled
+                              ? 'cursor-move border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800'
+                              : ''
+                          } transition-all duration-200`}
+                          style={{
+                            ...provided.draggableProps.style,
+                            // Fix overlapping text issues
+                            left: 'auto !important',
+                            top: 'auto !important',
+                            ...(snapshot.isDragging && {
+                              transform: `${provided.draggableProps.style?.transform} rotate(1deg)`,
+                              zIndex: 9999,
+                              position: 'fixed',
+                              width: provided.draggableProps.style?.width || 'auto',
+                            }),
+                          }}
+                        >
+                          {dragEnabled && (
+                            <div
+                              {...provided.dragHandleProps}
+                              className="flex items-center justify-center w-full py-3 mb-4 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 rounded-md text-blue-600 dark:text-blue-300 text-sm font-medium border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors cursor-grab active:cursor-grabbing"
+                            >
+                              <span className="mr-2 select-none">⋮⋮</span>
+                              <span className="select-none">
+                                Drag to reorder &quot;{componentKey}&quot; section
+                              </span>
+                            </div>
+                          )}
+                          <Component />
+                        </div>
+                      )
+
+                      // Use portal for dragging to prevent text overlap
+                      if (snapshot.isDragging && typeof window !== 'undefined') {
+                        return createPortal(draggingContent, document.body)
+                      }
+
+                      return draggingContent
+                    }}
                   </Draggable>
                 )
               })}
