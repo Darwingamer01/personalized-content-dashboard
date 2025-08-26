@@ -69,12 +69,11 @@ export default function DraggableLayout() {
               {...provided.droppableProps}
               ref={provided.innerRef}
               className="space-y-8"
-              style={{ transform: 'none' }}
             >
               {fullLayoutOrder.map((componentKey, index) => {
                 const Component = components[componentKey as keyof typeof components]
                 if (!Component) return null
-
+                
                 return (
                   <Draggable
                     key={componentKey}
@@ -88,32 +87,28 @@ export default function DraggableLayout() {
                         {...provided.draggableProps}
                         className={`${
                           snapshot.isDragging
-                            ? 'shadow-2xl bg-white dark:bg-gray-800 border-2 border-blue-500 rounded-lg opacity-95 z-50'
+                            ? 'shadow-2xl transform rotate-2 z-50 bg-white dark:bg-gray-800'
                             : 'shadow-sm'
                         } ${
                           dragEnabled
-                            ? 'cursor-move border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800'
+                            ? 'cursor-move border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4'
                             : ''
                         } transition-all duration-200`}
                         style={{
                           ...provided.draggableProps.style,
                           left: 'auto !important',
                           top: 'auto !important',
-                          transform: snapshot.isDragging ? 'rotate(1deg)' : 'none',
                         }}
                       >
                         {dragEnabled && (
                           <div
                             {...provided.dragHandleProps}
-                            className="flex items-center justify-center w-full py-3 mb-4 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 rounded-md text-blue-600 dark:text-blue-300 text-sm font-medium border border-blue-200 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors cursor-grab active:cursor-grabbing select-none"
+                            className="flex items-center justify-center w-full py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300 text-sm font-medium select-none"
                           >
-                            <span className="mr-2">⋮⋮</span>
-                            Drag to reorder &quot;{componentKey}&quot; section
+                            ⋮⋮ Drag to reorder &quot;{componentKey}&quot; section
                           </div>
                         )}
-                        <div style={{ transform: 'none' }}>
-                          <Component />
-                        </div>
+                        <Component />
                       </div>
                     )}
                   </Draggable>
