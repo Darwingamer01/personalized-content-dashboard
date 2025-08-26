@@ -69,7 +69,7 @@ export default function DraggableLayout() {
               {...provided.droppableProps}
               ref={provided.innerRef}
               className="space-y-8"
-              style={{ transform: 'none' }} // Critical fix for positioning
+              style={{ transform: 'none' }}
             >
               {fullLayoutOrder.map((componentKey, index) => {
                 const Component = components[componentKey as keyof typeof components]
@@ -100,9 +100,6 @@ export default function DraggableLayout() {
                           left: 'auto !important',
                           top: 'auto !important',
                           transform: snapshot.isDragging ? 'rotate(1deg)' : 'none',
-                          backgroundColor: snapshot.isDragging 
-                            ? 'white' 
-                            : provided.draggableProps.style?.backgroundColor,
                         }}
                       >
                         {dragEnabled && (
