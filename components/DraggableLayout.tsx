@@ -45,11 +45,10 @@ export default function DraggableLayout() {
         </h1>
         <button
           onClick={() => setDragEnabled(!dragEnabled)}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-            dragEnabled
+          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${dragEnabled
               ? 'bg-red-600 text-white hover:bg-red-700'
               : 'bg-blue-600 text-white hover:bg-blue-700'
-          }`}
+            }`}
         >
           {dragEnabled ? 'Disable Drag & Drop' : 'Enable Drag & Drop'}
         </button>
@@ -87,15 +86,13 @@ export default function DraggableLayout() {
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
-                          className={`${
-                            snapshot.isDragging
+                          className={`${snapshot.isDragging
                               ? 'shadow-2xl z-50 bg-white dark:bg-gray-800 border-2 border-blue-500 rounded-lg opacity-95'
                               : 'shadow-sm'
-                          } ${
-                            dragEnabled
+                            } ${dragEnabled
                               ? 'cursor-move border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800'
                               : ''
-                          } transition-all duration-200`}
+                            } transition-all duration-200`}
                           style={{
                             ...provided.draggableProps.style,
                             // Fix overlapping text issues
@@ -105,9 +102,10 @@ export default function DraggableLayout() {
                               transform: `${provided.draggableProps.style?.transform} rotate(1deg)`,
                               zIndex: 9999,
                               position: 'fixed',
-                              width: provided.draggableProps.style?.width || 'auto',
+                              width: 'auto',
                             }),
                           }}
+
                         >
                           {dragEnabled && (
                             <div
