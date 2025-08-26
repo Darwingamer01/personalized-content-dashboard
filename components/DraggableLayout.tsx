@@ -31,13 +31,12 @@ export default function DraggableLayout() {
     dispatch(updateLayoutOrder(items))
   }
 
-  // Add favorites to layout if not present
   const fullLayoutOrder = layoutOrder.includes('favorites')
     ? layoutOrder
     : [...layoutOrder, 'favorites']
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" style={{ transform: 'none' }}>
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
           Your Dashboard
@@ -69,6 +68,7 @@ export default function DraggableLayout() {
               {...provided.droppableProps}
               ref={provided.innerRef}
               className="space-y-8"
+              style={{ transform: 'none' }}
             >
               {fullLayoutOrder.map((componentKey, index) => {
                 const Component = components[componentKey as keyof typeof components]
@@ -87,17 +87,17 @@ export default function DraggableLayout() {
                         {...provided.draggableProps}
                         className={`${
                           snapshot.isDragging
-                            ? 'shadow-2xl transform rotate-2 z-50 bg-white dark:bg-gray-800'
+                            ? 'shadow-2xl rotate-1 z-50'
                             : 'shadow-sm'
                         } ${
                           dragEnabled
                             ? 'cursor-move border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4'
                             : ''
-                        } transition-all duration-200`}
+                        } transition-all duration-200 bg-white dark:bg-gray-800`}
                         style={{
                           ...provided.draggableProps.style,
-                          left: 'auto !important',
-                          top: 'auto !important',
+                          transform: 'none',
+                          position: 'relative',
                         }}
                       >
                         {dragEnabled && (
@@ -108,7 +108,9 @@ export default function DraggableLayout() {
                             ⋮⋮ Drag to reorder &quot;{componentKey}&quot; section
                           </div>
                         )}
-                        <Component />
+                        <div style={{ transform: 'none' }}>
+                          <Component />
+                        </div>
                       </div>
                     )}
                   </Draggable>
