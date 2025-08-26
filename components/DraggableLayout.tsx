@@ -31,12 +31,13 @@ export default function DraggableLayout() {
     dispatch(updateLayoutOrder(items))
   }
 
-  const fullLayoutOrder = layoutOrder.includes('favorites')
-    ? layoutOrder
+  // Add favorites to layout if not present
+  const fullLayoutOrder = layoutOrder.includes('favorites') 
+    ? layoutOrder 
     : [...layoutOrder, 'favorites']
 
   return (
-    <div className="space-y-8" style={{ transform: 'none' }}>
+    <div className="space-y-8">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
           Your Dashboard
@@ -68,12 +69,9 @@ export default function DraggableLayout() {
               {...provided.droppableProps}
               ref={provided.innerRef}
               className="space-y-8"
-              style={{ transform: 'none' }}
             >
               {fullLayoutOrder.map((componentKey, index) => {
                 const Component = components[componentKey as keyof typeof components]
-                if (!Component) return null
-                
                 return (
                   <Draggable
                     key={componentKey}
@@ -87,30 +85,23 @@ export default function DraggableLayout() {
                         {...provided.draggableProps}
                         className={`${
                           snapshot.isDragging
-                            ? 'shadow-2xl rotate-1 z-50'
+                            ? 'shadow-2xl transform rotate-2 z-50'
                             : 'shadow-sm'
                         } ${
                           dragEnabled
                             ? 'cursor-move border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4'
                             : ''
-                        } transition-all duration-200 bg-white dark:bg-gray-800`}
-                        style={{
-                          ...provided.draggableProps.style,
-                          transform: 'none',
-                          position: 'relative',
-                        }}
+                        } transition-all duration-200`}
                       >
                         {dragEnabled && (
                           <div
                             {...provided.dragHandleProps}
-                            className="flex items-center justify-center w-full py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300 text-sm font-medium select-none"
+                            className="flex items-center justify-center w-full py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300 text-sm font-medium"
                           >
-                            ⋮⋮ Drag to reorder &quot;{componentKey}&quot; section
+                            ⋮⋮ Drag to reorder "{componentKey}" section
                           </div>
                         )}
-                        <div style={{ transform: 'none' }}>
-                          <Component />
-                        </div>
+                        <Component />
                       </div>
                     )}
                   </Draggable>
