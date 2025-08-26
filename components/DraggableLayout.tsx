@@ -98,7 +98,7 @@ export default function DraggableLayout() {
                             {...provided.dragHandleProps}
                             className="flex items-center justify-center w-full py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300 text-sm font-medium"
                           >
-                            ⋮⋮ Drag to reorder "{componentKey}" section
+                            ⋮⋮ Drag to reorder &quot;{componentKey}&quot; section
                           </div>
                         )}
                         <Component />
