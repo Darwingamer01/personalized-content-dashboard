@@ -69,6 +69,7 @@ export default function DraggableLayout() {
               {...provided.droppableProps}
               ref={provided.innerRef}
               className="space-y-8"
+              style={{ transform: 'none' }} // Critical fix for positioning
             >
               {fullLayoutOrder.map((componentKey, index) => {
                 const Component = components[componentKey as keyof typeof components]
@@ -87,7 +88,7 @@ export default function DraggableLayout() {
                         {...provided.draggableProps}
                         className={`${
                           snapshot.isDragging
-                            ? 'shadow-2xl rotate-1 bg-white dark:bg-gray-800 border-2 border-blue-500 rounded-lg opacity-95 z-50'
+                            ? 'shadow-2xl bg-white dark:bg-gray-800 border-2 border-blue-500 rounded-lg opacity-95 z-50'
                             : 'shadow-sm'
                         } ${
                           dragEnabled
@@ -98,6 +99,10 @@ export default function DraggableLayout() {
                           ...provided.draggableProps.style,
                           left: 'auto !important',
                           top: 'auto !important',
+                          transform: snapshot.isDragging ? 'rotate(1deg)' : 'none',
+                          backgroundColor: snapshot.isDragging 
+                            ? 'white' 
+                            : provided.draggableProps.style?.backgroundColor,
                         }}
                       >
                         {dragEnabled && (
@@ -109,7 +114,9 @@ export default function DraggableLayout() {
                             Drag to reorder &quot;{componentKey}&quot; section
                           </div>
                         )}
-                        <Component />
+                        <div style={{ transform: 'none' }}>
+                          <Component />
+                        </div>
                       </div>
                     )}
                   </Draggable>
