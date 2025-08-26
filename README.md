@@ -4,8 +4,7 @@
 A responsive, interactive dashboard for personalized content consumption featuring news articles, movie recommendations, and social media feeds with advanced user customization capabilities.
 
 ## 🚀 Live Demo
-**Live Application**: https://your-vercel-url-here.vercel.app
-**Demo Video**: [Will be added after recording]
+**Live Application**: https://personalized-content-dashboard-8ztsdcz22.vercel.app/
 
 ## ✨ Features Implemented
 
