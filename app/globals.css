@@ -25,3 +25,24 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Fix react-beautiful-dnd white drag issue */
+* {
+  transform: none !important;
+}
+
+/* More targeted approach - only during dragging */
+[data-rbd-drag-handle-draggable-id] {
+  transform: none !important;
+}
+
+[data-rbd-draggable-id] {
+  transform: none !important;
+  position: relative !important;
+}
+
+/* Override any parent transforms during drag */
+body[style*="transform"] {
+  transform: none !important;
+}
+
