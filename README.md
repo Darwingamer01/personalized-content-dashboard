@@ -5,6 +5,7 @@ A responsive, interactive dashboard for personalized content consumption featuri
 
 ## 🚀 Live Demo
 **Live Application**: https://personalized-content-dashboard-2st6oax61.vercel.app/
+
 **Demo Video**: https://drive.google.com/file/d/1f9i9VGZ9S3JK_rbTQdPSDp1hIx56v98Q/view?usp=sharing
 
 ## ✨ Features Implemented
