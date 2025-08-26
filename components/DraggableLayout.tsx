@@ -4,27 +4,19 @@ import { useState } from 'react'
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
 import { useAppDispatch, useAppSelector } from '../lib/hooks'
 import { updateLayoutOrder } from '../lib/slices/preferencesSlice'
-import NewsFeed from './NewsFeed'
-import MoviesFeed from './MoviesFeed'
-import SocialFeed from './SocialFeed'
-import FavoritesSection from './FavoritesSection'
+
+// Safe imports with error handling
+const NewsFeed = lazy(() => import('./NewsFeed').catch(() => ({ default: () => <div>News Section</div> })))
+const MoviesFeed = lazy(() => import('./MoviesFeed').catch(() => ({ default: () => <div>Movies Section</div> })))
+const SocialFeed = lazy(() => import('./SocialFeed').catch(() => ({ default: () => <div>Social Section</div> })))
+const FavoritesSection = lazy(() => import('./FavoritesSection').catch(() => ({ default: () => <div>Favorites Section</div> })))
 
 const components = {
   news: NewsFeed,
   movies: MoviesFeed,
   social: SocialFeed,
-  favorites: () => (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-        Your Favorites
-      </h2>
-      <p className="text-gray-600 dark:text-gray-400">
-        Favorites functionality - temporarily simplified for drag & drop stability
-      </p>
-    </div>
-  ),
+  favorites: FavoritesSection,
 }
-
 
 export default function DraggableLayout() {
   const dispatch = useAppDispatch()
@@ -41,7 +33,6 @@ export default function DraggableLayout() {
     dispatch(updateLayoutOrder(items))
   }
 
-  // Add favorites to layout if not present
   const fullLayoutOrder = layoutOrder.includes('favorites') 
     ? layoutOrder 
     : [...layoutOrder, 'favorites']
@@ -82,6 +73,15 @@ export default function DraggableLayout() {
             >
               {fullLayoutOrder.map((componentKey, index) => {
                 const Component = components[componentKey as keyof typeof components]
+                
+                if (!Component) {
+                  return (
+                    <div key={componentKey} className="p-4 bg-gray-100 rounded-lg">
+                      Component "{componentKey}" not found
+                    </div>
+                  )
+                }
+                
                 return (
                   <Draggable
                     key={componentKey}
@@ -108,10 +108,12 @@ export default function DraggableLayout() {
                             {...provided.dragHandleProps}
                             className="flex items-center justify-center w-full py-2 mb-4 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300 text-sm font-medium"
                           >
-                            ⋮⋮ Drag to reorder "{componentKey}" section
+                            ⋮⋮ Drag to reorder &quot;{componentKey}&quot; section
                           </div>
                         )}
-                        <Component />
+                        <Suspense fallback={<div>Loading {componentKey}...</div>}>
+                          <Component />
+                        </Suspense>
                       </div>
                     )}
                   </Draggable>
