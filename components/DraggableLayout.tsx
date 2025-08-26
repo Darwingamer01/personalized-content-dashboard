@@ -1,15 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
 import { useAppDispatch, useAppSelector } from '../lib/hooks'
 import { updateLayoutOrder } from '../lib/slices/preferencesSlice'
-
-// Safe imports with error handling
-const NewsFeed = lazy(() => import('./NewsFeed').catch(() => ({ default: () => <div>News Section</div> })))
-const MoviesFeed = lazy(() => import('./MoviesFeed').catch(() => ({ default: () => <div>Movies Section</div> })))
-const SocialFeed = lazy(() => import('./SocialFeed').catch(() => ({ default: () => <div>Social Section</div> })))
-const FavoritesSection = lazy(() => import('./FavoritesSection').catch(() => ({ default: () => <div>Favorites Section</div> })))
+import NewsFeed from './NewsFeed'
+import MoviesFeed from './MoviesFeed'
+import SocialFeed from './SocialFeed'
+import FavoritesSection from './FavoritesSection'
 
 const components = {
   news: NewsFeed,
@@ -77,7 +75,7 @@ export default function DraggableLayout() {
                 if (!Component) {
                   return (
                     <div key={componentKey} className="p-4 bg-gray-100 rounded-lg">
-                      Component "{componentKey}" not found
+                      Loading {componentKey}...
                     </div>
                   )
                 }
@@ -111,9 +109,7 @@ export default function DraggableLayout() {
                             ⋮⋮ Drag to reorder &quot;{componentKey}&quot; section
                           </div>
                         )}
-                        <Suspense fallback={<div>Loading {componentKey}...</div>}>
-                          <Component />
-                        </Suspense>
+                        <Component />
                       </div>
                     )}
                   </Draggable>
