@@ -4,10 +4,10 @@ import { useState } from 'react'
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd'
 import { useAppDispatch, useAppSelector } from '../lib/hooks'
 import { updateLayoutOrder } from '../lib/slices/preferencesSlice'
-import NewsFeed from './NewFeed'
+import NewsFeed from './NewsFeed'
 import MoviesFeed from './MoviesFeed'
 import SocialFeed from './SocialFeed'
-import FavoritesSection from './FavoriteSection'
+import FavoritesSection from './FavoritesSection'
 
 const components = {
   news: NewsFeed,
