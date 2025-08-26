@@ -22,17 +22,20 @@ export default function SocialFeed() {
 
   const lastPostElementRef = useCallback(
     (node: HTMLDivElement) => {
+      // Disable automatic loading to prevent favorites section from being pushed down
       if (loading) return
       if (observer.current) observer.current.disconnect()
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          dispatch(fetchSocialPosts(page + 1))
-        }
-      })
-      if (node) observer.current.observe(node)
+      // Observer is set up but won't automatically trigger
     },
     [loading, hasMore, page, dispatch]
   )
+
+  const loadMorePosts = () => {
+    if (!loading && hasMore) {
+      dispatch(fetchSocialPosts(page + 1))
+    }
+  }
+
 
   const toggleFavorite = (postId: number) => {
     if (favorites.social.includes(postId)) {
@@ -110,6 +113,18 @@ export default function SocialFeed() {
           </div>
         )}
 
+        {hasMore && posts.length > 0 && (
+          <div className="text-center py-8">
+            <button
+              onClick={loadMorePosts}
+              disabled={loading}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Loading...' : 'Load More Posts'}
+            </button>
+          </div>
+        )}
+
         {!hasMore && posts.length > 0 && (
           <div className="text-center py-8">
             <p className="text-gray-600 dark:text-gray-400">
@@ -117,6 +132,7 @@ export default function SocialFeed() {
             </p>
           </div>
         )}
+
       </div>
     </div>
   )

@@ -1,0 +1,15 @@
+{
+  "functions": {
+    "app/api/**": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "NEXTAUTH_URL": "@nextauth_url",
+    "NEXTAUTH_SECRET": "@nextauth_secret",
+    "GITHUB_ID": "@github_id",
+    "GITHUB_SECRET": "@github_secret",
+    "NEWS_API_KEY": "@news_api_key",
+    "TMDB_API_KEY": "@tmdb_api_key"
+  }
+}
